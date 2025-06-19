@@ -65,7 +65,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   depends_on = [aws_acm_certificate.frontend_cert]
 
   origin {
-    domain_name = aws_s3_bucket.frontend.website_endpoint
+    domain_name = "${aws_s3_bucket.frontend.bucket}.s3-website.${var.region}.amazonaws.com"
     origin_id   = "S3-Frontend"
 
     custom_origin_config {
