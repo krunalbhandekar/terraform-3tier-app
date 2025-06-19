@@ -79,6 +79,10 @@ git clone https://github.com/krunalbhandekar/terraform-3tier-app.git
 ```
 
 ```bash
+cd terraform-3tier-app
+```
+
+```bash
 cd terraform
 ```
 
