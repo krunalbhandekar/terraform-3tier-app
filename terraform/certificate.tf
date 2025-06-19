@@ -1,6 +1,5 @@
 # ACM certificate for api.<domain>
 resource "aws_acm_certificate" "api_cert" {
-  provider          = aws.us_east_1 # Must be us-east-1 for widest compatibility
   domain_name       = "${var.api_subdomain}.${aws_route53_zone.primary.name}"
   validation_method = "DNS"
 
@@ -26,7 +25,6 @@ resource "aws_route53_record" "api_cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "api_cert" {
-  provider                = aws.us_east_1
   certificate_arn         = aws_acm_certificate.api_cert.arn
   validation_record_fqdns = [for r in aws_route53_record.api_cert_validation : r.fqdn]
 }

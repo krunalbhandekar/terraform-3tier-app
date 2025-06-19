@@ -17,8 +17,4 @@ provider "aws" {
   region = var.region
 }
 
-# ACM certificates for cloudfront must be in us-east-1; provider alias
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
-}
+

@@ -60,7 +60,6 @@ resource "aws_s3_object" "frontend_files" {
   key      = each.value
   source   = "${path.module}/../frontend/${each.value}"
 
-  acl = "public-read"
   content_type = lookup({
     "index.html" = "text/html"
     },
@@ -73,6 +72,5 @@ resource "aws_s3_object" "config_js" {
   bucket       = aws_s3_bucket.frontend.id
   key          = "config.js"
   content      = "window.API_BASE = \"https://${var.api_subdomain}.${var.root_domain}\";"
-  acl          = "public-read"
   content_type = "application/javascript"
 }
