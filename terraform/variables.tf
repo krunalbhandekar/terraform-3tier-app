@@ -6,7 +6,7 @@ variable "region" {
 
 variable "root_domain" {
   type        = string
-  description = "The apex domain you own (e.g. krunal.com)"
+  description = "The apex domain you own (e.g. domain.com)"
 }
 
 variable "frontend_subdomain" {
