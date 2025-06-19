@@ -14,17 +14,18 @@ This project sets up a **complete, production-grade 3-tier web application** usi
 ```graphql
 todo-app/
 ├── terraform/
-│   ├── main.tf
-│   ├── vpc.tf
 │   ├── alb.tf
-│   ├── rds.tf
-│   ├── s3.tf
-│   ├── cloudfront.tf
-│   ├── route53.tf
 │   ├── certificate.tf
+│   ├── ec2.tf
+│   ├── main.tf
+│   ├── output.tf
+│   ├── rds.tf
+│   ├── route53.tf
+│   ├── s3.tf
+│   ├── security_groups.tf
+│   ├── user_data.sh.tpl  # installs Node API on EC2
 │   ├── variables.tf
-│   ├── outputs.tf
-│   └── user_data.sh.tpl  # installs Node API on EC2
+│   └── vpc.tf
 ├── backend/              # Express.js Todo API (MySQL)
 ├── frontend/             # HTML/CSS + config.js (api url)
 └── README.md
@@ -38,7 +39,7 @@ todo-app/
         User (Browser)
              │
  ┌───────────┴────────────┐
- │    todo.krunal.bar     │
+ │    todo.domain.com    │
  │  (CloudFront + ACM)    │
  └───────────┬────────────┘
              │
@@ -48,7 +49,7 @@ todo-app/
              │ (fetches)
              ▼
  ┌──────────────────────────────┐
- │     api.krunal.bar (ALB)     │
+ │     api.domain.com (ALB)     │
  │    Node.js Backend on EC2    │
  └────────────┬────────────────┘
               │
@@ -63,7 +64,7 @@ todo-app/
 ## 🛠 Prerequisites
 
 - ✅ AWS CLI + credentials configured
-- ✅ A domain name (e.g., `krunal.bar`)
+- ✅ A domain name (e.g., `domain.com `)
 - ✅ A registered key pair in AWS (for EC2 SSH access)
 - ✅ Terraform
 
@@ -87,12 +88,23 @@ cd terraform
 terraform init
 ```
 
+**Update Variables Before Applying**
+
+🔔 **IMPORTANT:** Replace the placeholders below with your actual values:
+
+- **`root_domain`: your registered domain (e.g., `domain.com`)**
+- **`db_password`: a strong password for MySQL admin user**
+- **`key_pair_name`: your EC2 key pair name (must exist in AWS)**
+- **`allowed_ip`: your current IP address to allow SSH access to EC2**
+
+Then run:
+
 ```bash
 terraform apply \
-  -var="root_domain=krunal.bar" \
+  -var="root_domain=<domain.com >" \
   -var="db_username=admin" \
-  -var="db_password=StrongPassw0rd" \
-  -var="key_pair_name=my-keypair" \
+  -var="db_password=<StrongPassw0rd>" \
+  -var="key_pair_name=<my-keypair>" \
   -var="allowed_ip=$(curl -s ifconfig.me)/32"
 ```
 
@@ -114,15 +126,15 @@ zone_name_servers = [
 - Go to your **domain registrar** (e.g., GoDaddy, Namecheap, etc.)
 - Update the domain's nameservers to the 4 above.
 
-⚠️ **Until you do this, `todo.krunal.bar` and `api.krunal.bar` will not resolve!**
+⚠️ **Until you do this, `todo.domain.com ` and `api.domain.com ` will not resolve!**
 
 ### 🌐 Application Endpoints
 
-| Tier     | URL                                                | Notes                      |
-| -------- | -------------------------------------------------- | -------------------------- |
-| Frontend | [https://todo.krunal.bar](https://todo.krunal.bar) | Served via CloudFront + S3 |
-| Backend  | [https://api.krunal.bar](https://api.krunal.bar)   | Node API on EC2 + ALB      |
-| Database | RDS MySQL (private)                                | Connect via EC2            |
+| Tier     | URL                                                 | Notes                      |
+| -------- | --------------------------------------------------- | -------------------------- |
+| Frontend | [https://todo.domain.com ](https://todo.domain.com) | Served via CloudFront + S3 |
+| Backend  | [https://api.domain.com ](https://api.domain.com)   | Node API on EC2 + ALB      |
+| Database | RDS MySQL (private)                                 | Connect via EC2            |
 
 ### 🔒 Security Notes
 
@@ -133,7 +145,7 @@ zone_name_servers = [
 ### ✅ To Do After Setup
 
 - Upload your custom frontend (HTML/CSS/JS) to the S3 bucket
-- Confirm both URLs (`todo.krunal.bar` and `api.krunal.bar`) work
+- Confirm both URLs (`todo.domain.com ` and `api.domain.com `) work
 - Monitor DNS propagation (~5–20 mins after NS update)
 
 ### 🧹 Destroy
