@@ -1,6 +1,6 @@
 resource "aws_security_group" "alb_sg" {
   name   = "todo-alb-sg"
-  vpc_id = aws_vpc.main.vpc_id
+  vpc_id = aws_vpc.main.id
 
   ingress {
     from_port   = 80
@@ -26,7 +26,7 @@ resource "aws_security_group" "alb_sg" {
 
 resource "aws_security_group" "app_sg" {
   name   = "todo-app-sg"
-  vpc_id = aws_vpc.main.vpc_id
+  vpc_id = aws_vpc.main.id
 
   ingress {
     from_port   = 3000
@@ -53,7 +53,7 @@ resource "aws_security_group" "app_sg" {
 
 resource "aws_security_group" "db_sg" {
   name   = "todo-db-sg"
-  vpc_id = aws_vpc.main.vpc_id
+  vpc_id = aws_vpc.main.id
 
   ingress {
     from_port   = 3306
